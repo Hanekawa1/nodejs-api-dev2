@@ -23,19 +23,20 @@ class UsuarioController {
 
   async findByIdeUsuarioSenha(req, res) {
     const { IdeUsuario, SenhaUsuario } = req.body;
+
     const usuario = await Usuario.findOne({ IdeUsuario: IdeUsuario });
 
     if (!usuario) {
-      return res.status(400).json({ error: "Usuário1 ou senha inválido" });
+      return res.status(400).json({ error: "Usuário ou senha inválido" });
     }
 
     var retorno = await usuario.compareHash(SenhaUsuario);
 
     if (!retorno) {
-      return res.status(400).json({ error: "Usuário2 ou senha inválido" });
+      return res.status(400).json({ error: "Usuário ou senha inválido" });
     }
 
-    return res.json(usuario);
+    return res.json({ usuario, token: Usuario.generationToken(usuario) });
   }
 
   async update(req, res) {

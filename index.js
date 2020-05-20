@@ -12,6 +12,7 @@ mongoose.connect(dataBaseConfig.uri, {
 
 mongoose.Promise = global.Promise;
 let db = mongoose.connection;
+db.on("error", console.error.bind(console, "Erro na ligação ao MongoDB"));
 
 const app = express();
 

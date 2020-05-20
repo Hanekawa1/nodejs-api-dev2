@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const authConfig = require("../config/auth");
 
 const Schema = mongoose.Schema;
 let UsuarioSchema = new Schema({
@@ -39,6 +41,14 @@ UsuarioSchema.pre("save", async function (next) {
 UsuarioSchema.methods = {
   compareHash(SenhaUsuario) {
     return bcrypt.compare(SenhaUsuario, this.SenhaUsuario);
+  },
+};
+
+UsuarioSchema.statics = {
+  generationToken({ _id, NomeUsuario }) {
+    return jwt.sign({ _id, NomeUsuario }, authConfig.secret, {
+      expiresIn: authConfig.ttl,
+    });
   },
 };
 
