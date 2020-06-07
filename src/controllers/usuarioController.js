@@ -39,10 +39,30 @@ class UsuarioController {
     return res.json({ usuario, token: Usuario.generationToken(usuario) });
   }
 
+  // async update(req, res) {
+  //   const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, {
+  //     new: true,
+  //   });
+  //   return res.json(usuario);
+  // }
+
   async update(req, res) {
-    const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+    // const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, {
+    //   new: true,
+    //   runValidators: true,
+    // });
+    const usuario = await Usuario.findOne({ _id: req.params.id }, function (
+      err,
+      doc
+    ) {
+      doc.SenhaUsuario = req.body.SenhaUsuario;
+      doc.NomeUsuario = req.body.NomeUsuario;
+      doc.IdeUsuario = req.body.IdeUsuario;
+      doc.Email = req.body.Email;
+      doc.save();
+      return doc;
     });
+
     return res.json(usuario);
   }
 }
